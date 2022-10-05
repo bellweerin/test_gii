@@ -6,6 +6,8 @@
         hover
         :fields="fields"
         :items="datas"
+        :per-page="perPage"
+        :current-page="currentPage"
         label-sort-asc=""
         label-sort-desc=""
         label-sort-clear=""
@@ -28,7 +30,13 @@
             >
               <div class="modal-dialog">
                 <div class="modal-content">
-                  <!-- {{row.item.id}} -->
+                  <div
+                    class="alert alert-primary"
+                    :id="'alert' + row.item.id"
+                    role="alert"
+                  >
+                    Update Time out success
+                  </div>
                   <div class="modal-header">
                     <h5 class="modal-title">เวลารถออก</h5>
                     <button
@@ -41,7 +49,9 @@
                   <div class="modal-body">
                     <div class="card border-primary">
                       <div class="card-body">
-                        <input type="hidden" v-model="data.id" />
+                        <!-- ID -->
+                        <input type="hidden" :value="row.item.id" />
+
                         <div class="row gy-5">
                           <div class="col-md-6">
                             <label for="">เลขทะเบียนรถ</label>
@@ -60,6 +70,7 @@
                               class="form-control"
                               placeholder="15-01-2565 14:30:20"
                               type="datetime-local"
+                              step="1"
                             />
                           </div>
                         </div>
@@ -74,7 +85,13 @@
                     >
                       ปิด
                     </button>
-                    <button type="button" class="btn btn-success">
+                    <button
+                      v-on:click="
+                        updateTimeOut(row.item.id, row.item.licenseNumber)
+                      "
+                      type="button"
+                      class="btn btn-success"
+                    >
                       บันทึก
                     </button>
                   </div>
@@ -85,15 +102,23 @@
           <div v-else>{{ row.item.timeOut }}</div>
         </template>
       </b-table>
-      <b-pagination
-        cl
-        v-model="currentPage"
-        :total-rows="rows"
-        :per-page="perPage"
-        aria-controls="my-table"
-      ></b-pagination>
 
-      <!-- <button class="btn btn-primary"></button> -->
+      <b-container >
+        <b-row class="justify-content-md-center">
+          
+          <b-col cols="12" md="auto"><b-pagination
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          aria-controls="my-table"
+        ></b-pagination></b-col>
+          
+        </b-row>
+
+       
+      </b-container>
+
+      
     </div>
   </div>
 </template>
@@ -103,12 +128,12 @@ import axios from "axios";
 export default {
   data() {
     return {
-      perPage: 10,
+      perPage: 5,
       currentPage: 1,
       datas: [],
       fields: [
-        { key: "id", lable: "ID", sortable: true },
-        { key: "licenseNumber", label: "License Nubber", sortable: true },
+        { key: "id", lable: "#", sortable: true },
+        { key: "licenseNumber", label: "License Number", sortable: true },
         { key: "timeIn", label: "Time in", sortable: true },
         { key: "timeOut", label: "Time out", sortable: true },
       ],
@@ -133,27 +158,33 @@ export default {
         .get("http://localhost:8080/api/car?page=1")
         .then((response) => {
           this.datas = response.data.data;
-
-          //   console.log(typeof(this.datas[1].timeIn));
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    addTimeOut() {
-    //   axios
-    //     .post("http://localhost:8080/api/car", {
-    //       id: this.data.id,
-    //       licenseNumber: this.data.licenseNumber,
-    //       timeOut: this.data.timeOut,
-    //     })
-    //     .then((response) => {
-    //       console.log(response);
-    //       
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
+    setData(id, licenseNumber) {
+      this.data.id = id;
+      this.data.licenseNumber = licenseNumber;
+
+      this.data.timeOut = this.formatDate(this.data.timeOut);
+    },
+    updateTimeOut(id, licenseNumber) {
+      this.setData(id, licenseNumber);
+      //   console.log(this.data);
+      axios
+        .post("http://localhost:8080/api/car", this.data)
+        .then((response) => {
+          let success = response.data.success;
+          if (success) {
+            let alert = document.getElementById("alert" + this.data.id);
+            console.log(alert);
+            alert.style.display = "block";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     formatDate(datetime) {
       let date_time = new Date(datetime);
@@ -188,6 +219,9 @@ export default {
   margin-right: auto;
 }
 .table {
-  width: 50%;
+  width: 80%;
+}
+.alert {
+  display: none;
 }
 </style>

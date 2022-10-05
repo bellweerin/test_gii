@@ -5,12 +5,15 @@
       data-bs-toggle="modal"
       data-bs-target="#modal-car-in"
     >
-      เพิ่ม
+      Add data
     </button>
 
     <div class="modal fade" id="modal-car-in" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
+          <div class="alert alert-primary" id="alert" role="alert">
+            Create Data Success
+          </div>
           <div class="modal-header">
             <h5 class="modal-title">เวลารถเข้า</h5>
             <button
@@ -41,7 +44,7 @@
                       class="form-control"
                       type="datetime-local"
                       step="1"
-                      placeholder="DD/MM/YYYY"
+                      date-time-format="DD-MM-YYYY HH:mm:ss"
                     />
                   </div>
                 </div>
@@ -67,8 +70,8 @@
 </template>
 
 <script>
-import $ from "jquery";
-// import axios from 'axios';
+// import $ from "jquery-ui";
+import axios from "axios";
 export default {
   name: "FormData",
   data() {
@@ -77,10 +80,10 @@ export default {
         licenseNumber: "",
         timeIn: "",
       },
+      dafaultDate: "",
     };
   },
   mounted() {
-    this.setDateTime();
   },
   methods: {
     formatDate(datetime) {
@@ -106,33 +109,28 @@ export default {
 
       return timeIn;
     },
-    setDateTime() {
-      let date = $("#datepicker").datepicker("getDate");
-      //   let date_time = document.getElementById("datetime").value
-      //   date_time.datepicker({ dateFormat: 'DD-MM-YYYY HH:mm:ss' }).val();
-      console.log(date);
-    },
     addData() {
-      console.log(this.data);
-
       this.data.timeIn = this.formatDate(this.data.timeIn);
-
-      //   date_time.getDate()+"-"+date_time.
-      console.log(this.data.timeIn);
-      //   console.log(typeof day);
-      //   axios
-      //     .put("http://localhost:8080/api/car", this.data)
-      //     .then((response) => {
-      //       console.log(response);
-      //       
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     });
+      axios
+        .put("http://localhost:8080/api/car", this.data)
+        .then((response) => {
+          let success = response.data.success;
+          if (success) {
+            let alert = document.getElementById("alert"+this.data.id);
+            console.log(alert)
+            alert.style.display="block"
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
 </script>
 
 <style scoped>
+  .alert{
+    display: none;
+  }
 </style>

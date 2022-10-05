@@ -1,9 +1,9 @@
 <template>
   <div id="app">
  
-    <DataTable></DataTable>
-    <FormData></FormData>
-    <Test></Test>
+    <!-- <DataTable></DataTable>
+    <FormData></FormData> -->
+    <!-- <Test></Test> -->
 
 
     <router-view></router-view>
@@ -11,16 +11,16 @@
 </template>
 
 <script>
-import DataTable from './components/DataTable'
-import FormData from './components/FormData';
-import Test from '../views/Test'
+// import DataTable from './components/DataTable'
+// import FormData from './components/FormData';
+// import Test from '../views/Test'
 
 
 export default {
   name: 'App',
   components: {
     
-    DataTable,FormData,Test
+    // DataTable,FormData
   }
 }
 </script>
