@@ -1,17 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+ 
+    <DataTable></DataTable>
+    <FormData></FormData>
+    <Test></Test>
+
+
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DataTable from './components/DataTable'
+import FormData from './components/FormData';
+import Test from '../views/Test'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    
+    DataTable,FormData,Test
   }
 }
 </script>
