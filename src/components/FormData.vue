@@ -14,6 +14,9 @@
           <div class="alert alert-primary" id="alert" role="alert">
             Create Data Success
           </div>
+          <div class="alert alert-danger" id="error" role="alert">
+            Create Data Error
+          </div>
           <div class="modal-header">
             <h5 class="modal-title">เวลารถเข้า</h5>
             <button
@@ -59,7 +62,11 @@
             >
               ปิด
             </button>
-            <button type="button" class="btn btn-success" v-on:click="addData">
+            <button
+              type="button"
+              class="btn btn-success"
+              v-on:click="addData()"
+            >
               บันทึก
             </button>
           </div>
@@ -83,8 +90,7 @@ export default {
       dafaultDate: "",
     };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     formatDate(datetime) {
       let date_time = new Date(datetime);
@@ -111,18 +117,21 @@ export default {
     },
     addData() {
       this.data.timeIn = this.formatDate(this.data.timeIn);
+
       axios
         .put("http://localhost:8080/api/car", this.data)
         .then((response) => {
           let success = response.data.success;
           if (success) {
-            let alert = document.getElementById("alert"+this.data.id);
-            console.log(alert)
-            alert.style.display="block"
+            let alert = document.getElementById("alert");
+            console.log(alert);
+            alert.style.display = "block";
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error)
+          let errorAlert = document.getElementById("error");
+          errorAlert.style.display = "block";
         });
     },
   },
@@ -130,7 +139,7 @@ export default {
 </script>
 
 <style scoped>
-  .alert{
-    display: none;
-  }
+.alert {
+  display: none;
+}
 </style>

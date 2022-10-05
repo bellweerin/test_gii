@@ -37,6 +37,13 @@
                   >
                     Update Time out success
                   </div>
+                  <div
+                    class="alert alert-danger"
+                    :id="'error' + row.item.id"
+                    role="alert"
+                  >
+                    Create Data Error
+                  </div>
                   <div class="modal-header">
                     <h5 class="modal-title">เวลารถออก</h5>
                     <button
@@ -103,22 +110,18 @@
         </template>
       </b-table>
 
-      <b-container >
+      <b-container>
         <b-row class="justify-content-md-center">
-          
-          <b-col cols="12" md="auto"><b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="my-table"
-        ></b-pagination></b-col>
-          
+          <b-col cols="12" md="auto"
+            ><b-pagination
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              aria-controls="my-table"
+            ></b-pagination
+          ></b-col>
         </b-row>
-
-       
       </b-container>
-
-      
     </div>
   </div>
 </template>
@@ -178,12 +181,15 @@ export default {
           let success = response.data.success;
           if (success) {
             let alert = document.getElementById("alert" + this.data.id);
-            console.log(alert);
+            // console.log(alert);
             alert.style.display = "block";
           }
         })
         .catch((error) => {
           console.log(error);
+          console.log(error);
+          let errorAlert = document.getElementById("error" + this.data.id);
+          errorAlert.style.display = "block";
         });
     },
     formatDate(datetime) {
