@@ -1,11 +1,11 @@
 <template>
   <div id="form-data">
     <button
-      class="btn btn-success"
+      class="btn btn-info"
       data-bs-toggle="modal"
       data-bs-target="#modal-car-in"
     >
-      Add data
+      Add Data
     </button>
 
     <div class="modal fade" id="modal-car-in" tabindex="-1">
@@ -60,14 +60,14 @@
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              ปิด
+              Close
             </button>
             <button
               type="button"
-              class="btn btn-success"
+              class="btn btn-info"
               v-on:click="addData()"
             >
-              บันทึก
+              Save
             </button>
           </div>
         </div>
@@ -142,4 +142,5 @@ export default {
 .alert {
   display: none;
 }
+
 </style>

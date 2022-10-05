@@ -1,6 +1,10 @@
 <template>
   <div id="data-table">
     <div class="container">
+      <div>
+        <h3>Data Table</h3>
+      </div>
+
       <b-table
         class="table center"
         hover
@@ -15,11 +19,11 @@
         <template #cell(timeOut)="row">
           <div v-if="!row.item.timeOut">
             <button
-              class="btn btn-warning"
+              class="btn btn-outline-warning"
               data-bs-toggle="modal"
               :data-bs-target="'#modal-car-out' + row.item.id"
             >
-              Add Time Out
+              Add
             </button>
 
             <!-- Modal -->
@@ -90,16 +94,16 @@
                       class="btn btn-secondary"
                       data-bs-dismiss="modal"
                     >
-                      ปิด
+                      Close
                     </button>
                     <button
                       v-on:click="
                         updateTimeOut(row.item.id, row.item.licenseNumber)
                       "
                       type="button"
-                      class="btn btn-success"
+                      class="btn btn-info"
                     >
-                      บันทึก
+                      Save
                     </button>
                   </div>
                 </div>
@@ -114,6 +118,8 @@
         <b-row class="justify-content-md-center">
           <b-col cols="12" md="auto"
             ><b-pagination
+              page-class="danger"
+              pills
               v-model="currentPage"
               :total-rows="rows"
               :per-page="perPage"
@@ -140,7 +146,8 @@ export default {
         { key: "timeIn", label: "Time in", sortable: true },
         { key: "timeOut", label: "Time out", sortable: true },
       ],
-      data: {
+        data: {
+        x: 0,
         id: "",
         licenseNumber: "",
         timeOut: "",
@@ -229,5 +236,10 @@ export default {
 }
 .alert {
   display: none;
+}
+.pagination {
+}
+.special {
+  transition: 0.3s color ease;
 }
 </style>

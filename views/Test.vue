@@ -66,13 +66,12 @@
           <div class="col">
             <DataTable></DataTable>
             <FormData></FormData>
-
-
-            
-          
           </div>
         </div>
       </div>
+      <!-- <button id="special" class="btn btn-danger special">
+        Special Click !
+      </button> -->
     </div>
   </div>
 </template>
@@ -81,6 +80,7 @@
 import axios from "axios";
 import DataTable from "../src/components/DataTable";
 import FormData from "../src/components/FormData";
+import anime from "animejs"
 export default {
   name: "Test",
   components: { DataTable, FormData },
@@ -90,10 +90,12 @@ export default {
       data: {},
     };
   },
-  mounted() {
+    mounted() {
     this.getAll();
+    // this.special();
   },
-  methods: {
+    methods: {
+    
     getAll() {
       axios
         .get("http://localhost:8080/api/car?page=1")
@@ -118,9 +120,45 @@ export default {
           console.log(error);
         });
     },
+    special() {
+      const button = document.getElementById("special");
+
+      const animateMove = (element, prop, pixels) =>
+        anime({
+          targets: element,
+          [prop]: `${pixels}px`,
+          easing: "easeOutCirc",
+        });
+
+      ["mouseover", "click"].forEach(function (el) {
+          button.addEventListener(el, function (event) {
+            console.log(event)
+          const top = getRandomNumber(window.innerHeight - this.offsetHeight);
+          const left = getRandomNumber(window.innerWidth - this.offsetWidth);
+
+          animateMove(this, "left", left).play();
+          animateMove(this, "top", top).play();
+        });
+      });
+
+      const getRandomNumber = (num) => {
+        return Math.floor(Math.random() * (num + 1));
+      };
+        },
+      
+  
   },
 };
 </script>
 
 <style scoped>
+.special {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 1.5rem;
+  border-radius: 5px;
+}
 </style>
