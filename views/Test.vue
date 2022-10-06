@@ -69,9 +69,15 @@
           </div>
         </div>
       </div>
-      <!-- <button id="special" class="btn btn-danger special">
+      <button
+        id="special"
+        v-on:mouseover="mouseAction()"
+        v-on:click="mouseAction()"
+        v-on:mousemove="mouseAction()"
+        class="btn btn-danger"
+      >
         Special Click !
-      </button> -->
+      </button>
     </div>
   </div>
 </template>
@@ -80,7 +86,7 @@
 import axios from "axios";
 import DataTable from "../src/components/DataTable";
 import FormData from "../src/components/FormData";
-import anime from "animejs"
+import anime from "animejs";
 export default {
   name: "Test",
   components: { DataTable, FormData },
@@ -90,12 +96,16 @@ export default {
       data: {},
     };
   },
-    mounted() {
+  mounted() {
     this.getAll();
-    // this.special();
+    let recaptchaScript = document.createElement("script");
+    recaptchaScript.setAttribute(
+      "src",
+      "https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.0/anime.min.js"
+    );
+    document.head.appendChild(recaptchaScript);
   },
-    methods: {
-    
+  methods: {
     getAll() {
       axios
         .get("http://localhost:8080/api/car?page=1")
@@ -120,39 +130,34 @@ export default {
           console.log(error);
         });
     },
-    special() {
-      const button = document.getElementById("special");
-
-      const animateMove = (element, prop, pixels) =>
-        anime({
-          targets: element,
-          [prop]: `${pixels}px`,
-          easing: "easeOutCirc",
-        });
-
-      ["mouseover", "click"].forEach(function (el) {
-          button.addEventListener(el, function (event) {
-            console.log(event)
-          const top = getRandomNumber(window.innerHeight - this.offsetHeight);
-          const left = getRandomNumber(window.innerWidth - this.offsetWidth);
-
-          animateMove(this, "left", left).play();
-          animateMove(this, "top", top).play();
-        });
+    randomNumber(num) {
+      return Math.floor(Math.random() * (num + 1));
+    },
+    animateMove(element, prop, pixels) {
+      let animation = anime({
+        targets: element,
+        [prop]: `${pixels}px`,
+        easing: "easeOutCirc",
       });
+      return animation;
+    },
+    mouseAction() {
+      let button = document.getElementById("special");
+      const top = this.randomNumber(window.innerHeight);
+      const left = this.randomNumber(window.innerWidth);
 
-      const getRandomNumber = (num) => {
-        return Math.floor(Math.random() * (num + 1));
-      };
-        },
-      
-  
+      let animation_left = this.animateMove(button, "left", left);
+      let animation_top = this.animateMove(button, "top", top);
+
+      animation_left.play();
+      animation_top.play();
+    },
   },
 };
 </script>
 
 <style scoped>
-.special {
+#special {
   position: absolute;
   top: 50%;
   left: 50%;
